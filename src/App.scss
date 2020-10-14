@@ -1,0 +1,167 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+$colorError: #ff4d4d;
+$colorErrorLight: hsl(0, 100%, 96%);
+
+$colorInfo: #3399ff;
+$colorInfoMiddle: hsl(210, 100%, 90%);
+$colorInfoLight: hsl(210, 100%, 98%);
+
+$colorSuccess: #3cc520;
+$colorSuccessLight: hsl(110, 72%, 98%);
+
+$colorWarn: #ff8533;
+$colorWarnLight: hsl(24, 100%, 96%);
+
+$colorText: #323434;
+$colorTextLight: hsl(180, 2%, 90%);
+$colorTextMiddle: hsl(180, 2%, 50%);
+
+$colorWhite: #fff;
+
+body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.App {
+  font-family: monospace;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  color: $colorText;
+  background-color: #fff;
+  .Head {
+    height: 40px;
+    flex: 0 0 40px;
+  }
+  .Body {
+    display: flex;
+    flex: 1 1 100vh;
+  }
+  .NodeLib {
+    flex: 0 0 200px;
+    background-color: rgba($colorText, 0.1);
+    padding: 10px;
+    .Node {
+      background-color: $colorTextLight;
+      border: 1px solid $colorTextMiddle;
+    }
+  }
+  .Workflow {
+    position: relative;
+    flex: 0 0 300px;
+    background-color: $colorInfoLight;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+
+    &--Body {
+      z-index: 1;
+      flex: 1 1 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    &--NodeList {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      .Node {
+        z-index: 1;
+        background-color: $colorInfoMiddle;
+        border: 1px solid $colorInfo;
+        border-radius: 4px;
+        &.Node--active {
+          background-color: $colorInfo;
+          color: $colorWhite;
+        }
+        &.Node--error {
+          background-color: $colorErrorLight;
+          border-color: $colorError;
+          &.Node--active {
+            background-color: $colorError;
+          }
+        }
+      }
+      
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        // left: 50%;
+        bottom: 0;
+        width: 1px;
+        background-image: linear-gradient(
+          to bottom,
+          transparent 10px,
+          $colorInfo 20px
+        );
+        background-size: 2px 20px;
+        background-repeat: repeat-y;
+        z-index: 0;
+        animation: moveDown 0.5s linear infinite both;
+      }
+    }
+  }
+  .State {
+    flex: 1 1 100%;
+    background-color: $colorSuccessLight;
+    display: flex;
+    flex-direction: column;
+    .NodeState,
+    .NodeInput,
+    .NodeOutput {
+      flex: 1 1 33.33%;
+      border: 1px solid black;
+      display: flex;
+      flex-direction: column;
+      textarea {
+        padding: 4px;
+        flex: 1 1 100%;
+        min-height: 50%;
+        border: 1px solid lightgray;
+        border-radius: 4px;
+        &:hover {
+          border-color: lightblue;
+        }
+        &:focus {
+          outline: none;
+          border: 1px solid blue;
+        }
+      }
+      .NodeConfigProp {
+        display: block;
+      }
+    }
+  }
+  .Node {
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    max-width: 200px;
+  }
+  .Node + .Node {
+    margin-top: 20px;
+  }
+  // hack: https://github.com/atlassian/react-beautiful-dnd/issues/216#issuecomment-485225265
+  .Node--copied ~ .Node  {
+    transform: none!important;
+  }
+}
+
+@keyframes moveDown {
+  from {
+    top: 0;
+  }
+  to {
+    top: 20px;
+  }
+}
